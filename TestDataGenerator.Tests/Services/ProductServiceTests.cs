@@ -5,6 +5,8 @@ using TestDataGenerator.Core.Interfaces;
 using TestDataGenerator.Core.Models;
 using TestDataGenerator.Demo.Services;
 using TestDataGenerator.Core.Extensions;
+using TestDataGenerator.Tests.Adapters;
+using TestDataGenerator.Tests.Base;
 
 namespace TestDataGenerator.Tests.Services
 {
@@ -18,7 +20,7 @@ namespace TestDataGenerator.Tests.Services
             _moqAdapter = new MoqTestDataAdapter<Product>();
             _fakerAdapter = new FakerTestDataAdapter<Product>();
         }
-
+        //  Moq kullanarak çoklu ürün getirme işlemini test eder
         [Fact]
         public void GetAllProducts_Should_Return_Multiple_Products_Using_Moq()
         {
@@ -35,6 +37,7 @@ namespace TestDataGenerator.Tests.Services
             mockRepo.Verify(r => r.GetAll(), Times.Once);
         }
 
+        // Faker ile özel fiyatlı ürün oluşturmayı test eder
         [Fact]
         public void GetProduct_Should_Return_Product_With_Specific_Price_Using_Faker()
         {
@@ -58,6 +61,7 @@ namespace TestDataGenerator.Tests.Services
             Assert.Equal(499.99m, result.Price);
         }
 
+        // Aktif ürünleri getirme ve loglama işlemini test eder
         [Fact]
         public void GetAllProducts_Should_Log_And_Return_Active_Products()
         {
@@ -73,6 +77,7 @@ namespace TestDataGenerator.Tests.Services
 
         }
 
+        // Asenkron ürün getirme işlemini test eder
         [Fact]
         public async Task GetProduct_Should_Handle_Async_Generation()
         {

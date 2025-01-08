@@ -3,10 +3,11 @@ using Moq;
 using TestDataGenerator.Adapters.Moq;
 using TestDataGenerator.Core.Interfaces;
 using TestDataGenerator.Core.Models;
+using TestDataGenerator.Tests.Base;
 
 namespace TestDataGenerator.Tests.Adapters
 {
-    public class MoqAdapterTests
+    public class MoqAdapterTests : IBaseAdapterTest
     {
         private readonly ITestDataAdapter<Product> _adapter;
 
@@ -15,6 +16,7 @@ namespace TestDataGenerator.Tests.Adapters
             _adapter = new MoqTestDataAdapter<Product>();
         }
 
+        // Tek bir ürün oluşturabildiğini test eder
         [Fact]
         public void Generate_Should_Create_Single_Product()
         {
@@ -25,6 +27,7 @@ namespace TestDataGenerator.Tests.Adapters
             Assert.NotNull(product);
         }
 
+        // İstenilen sayıda ürün oluşturabildiğini kontrol eder
         [Theory]
         [InlineData(1)]
         [InlineData(5)]
@@ -39,6 +42,7 @@ namespace TestDataGenerator.Tests.Adapters
             Assert.All(products, p => Assert.NotNull(p));
         }
 
+        // Mock repository'nin doğru şekilde oluşturulduğunu doğrular
         [Fact]
         public void GetMockRepository_Should_Return_Repository_Mock()
         {
@@ -53,6 +57,7 @@ namespace TestDataGenerator.Tests.Adapters
             Assert.IsType<Mock<IRepository<Product>>>(repository);
         }
 
+        // Repository metodlarının çağrılma durumlarını takip edebildiğini test eder
         [Fact]
         public void MockRepository_Should_Track_Method_Calls()
         {
@@ -67,7 +72,7 @@ namespace TestDataGenerator.Tests.Adapters
             // Assert
             repository.Verify(r => r.Get(It.IsAny<int>()), Times.Once());
         }
-
+        // Asenkron ürün oluşturma işlemini test eder
         [Fact]
         public async Task GenerateAsync_Extension_Should_Create_Product()
         {

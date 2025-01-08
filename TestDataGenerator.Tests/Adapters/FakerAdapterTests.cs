@@ -3,10 +3,11 @@ using TestDataGenerator.Adapters.Faker;
 using TestDataGenerator.Core.Interfaces;
 using TestDataGenerator.Core.Models;
 using TestDataGenerator.Core.Extensions;
+using TestDataGenerator.Tests.Base;
 
 namespace TestDataGenerator.Tests.Adapters
 {
-    public class FakerAdapterTests
+    public class FakerAdapterTests : IBaseAdapterTest
     {
         private readonly ITestDataAdapter<Product> _adapter;
 
@@ -15,6 +16,7 @@ namespace TestDataGenerator.Tests.Adapters
             _adapter = new FakerTestDataAdapter<Product>();
         }
 
+        // Geçerli verilerle ürün oluşturulduğunu kontrol eder (Id, Name, Description vs.)
         [Fact]
         public void Generate_Should_Create_Product_With_Valid_Data()
         {
@@ -31,6 +33,7 @@ namespace TestDataGenerator.Tests.Adapters
             
         }
 
+        // Birden fazla benzersiz ürün oluşturabildiğini test eder
         [Theory]
         [InlineData(3)]
         [InlineData(7)]
@@ -46,6 +49,7 @@ namespace TestDataGenerator.Tests.Adapters
             
         }
 
+        // Faker nesnesinin doğru yapılandırıldığını doğrular
         [Fact]
         public void GetFaker_Should_Return_Configured_Faker()
         {
@@ -60,6 +64,7 @@ namespace TestDataGenerator.Tests.Adapters
             Assert.IsType<Faker<Product>>(faker);
         }
 
+        // Özel kuralların (örn: sabit fiyat) uygulandığını kontrol eder
         [Fact]
         public void Generate_Should_Respect_Custom_Rules()
         {
@@ -75,6 +80,7 @@ namespace TestDataGenerator.Tests.Adapters
             Assert.Equal(999.99m, product.Price);
         }
 
+        // Çoklu asenkron ürün oluşturmayı test eder
         [Fact]
         public async Task GenerateManyAsync_Extension_Should_Create_Products()
         {
